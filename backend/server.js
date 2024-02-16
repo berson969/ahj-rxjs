@@ -20,7 +20,7 @@ const setMessage = () => {
     messages = [];
   }
   messages.push(newMessage);
-  console.log("Новое сообщение установлено:", newMessage);
+  // console.log("Новое сообщение установлено:", newMessage);
 };
 
 app.get("/messages/unread", (req, res) => {
