@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "nodemon --exec node server.js",
+    "build": "node server.js",
     "lint": "eslint . --fix"
   },
   "type": "module",
