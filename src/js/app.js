@@ -1,7 +1,7 @@
 const MESSAGES_BASE_URL = "http://localhost:7071";
 const listGroup = document.querySelector(".list-group");
 
-const getFormatedDate = (received) => {
+const getFormattedDate = (received) => {
   const date = new Date(received);
 
   const hours = date.getHours().toString().padStart(2, "0");
@@ -11,7 +11,7 @@ const getFormatedDate = (received) => {
     month: "short",
     day: "numeric",
   });
-  return `<span class="time">${hours}:${minutes}</span> <span class="date">${dateLoc}</span>`;
+  return `<span class="time d-inline">${hours}:${minutes}</span> <span class="date d-inline">${dateLoc}</span>`;
 };
 
 const cutSubject = (subject) => {
@@ -24,19 +24,25 @@ const cutSubject = (subject) => {
 function renderItem(message) {
   const itemEl = document.createElement("li");
   itemEl.id = message.id;
-  itemEl.classList.add("list-group-item", "light-gray-bg", "d-flex");
+  itemEl.classList.add("list-group-item", "light-gray-bg", "row", "d-flex");
   itemEl.innerHTML = `
-        <div class="d-flex flex-column mr-5 col-md-8">
-            <div class="d-flex justify-content-between">
-                <span class="from mr-5">${message.from}</span>
-                <span class="subject mr-5">${cutSubject(message.subject)}</span>
+<!--        <div class="row">-->
+            <div class="col-md-9">
+              <div class="d-flex flex-column">
+                  <div class="row">
+                      <span class="from col">${message.from}</span>
+                      <span class="subject col">${cutSubject(
+                        message.subject
+                      )}</span>
+                  </div>
+      
+                  <span class="body d-none mt-4">${message.body}</span>
+              </div>
             </div>
-
-            <span class="body d-none mt-4">${message.body}</span>
-        </div>
-        <span class="datetime col-md-4 text-end">${getFormatedDate(
-          message.received
-        )}</span>`;
+            <div class="datetime d-flex col-md-3">
+                  ${getFormattedDate(message.received)}
+<!--            </div>-->
+        </div>`;
   return itemEl;
 }
 
@@ -84,7 +90,6 @@ const renderMessages = async () => {
       }
     }
     listGroup.addEventListener("click", clickHandler);
-
   } catch (error) {
     console.error("Error fetching or processing messages:", error);
   }
@@ -94,10 +99,33 @@ function clearGroup() {
   listGroup.innerHTML = "";
 }
 
+const startServer = async () => {
+  try {
+    const response = await fetch(`${MESSAGES_BASE_URL}/messages/start`, {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to start server");
+    }
+
+    const result = await response.json();
+    console.log("Server started successfully:", result);
+  } catch (error) {
+    console.error("Error start server:", error);
+  }
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
   clearGroup();
   await renderMessages();
   setInterval(async () => {
     await renderMessages();
   }, 10000);
+});
+
+const startBtn = document.querySelector('[data-method="startServer"]');
+
+startBtn.addEventListener("click", async () => {
+  await startServer();
 });

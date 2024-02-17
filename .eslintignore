@@ -4,4 +4,4 @@ docs
 webpack.common.js
 webpack.dev.js
 webpack.prod.js
-e2e
+/src/bootstrap-5.0.1-dist/

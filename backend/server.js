@@ -7,6 +7,8 @@ const app = express();
 app.use(cors());
 
 let messages = [];
+let intervalId;
+let timeoutId;
 
 const setMessage = () => {
   const newMessage = {
@@ -14,13 +16,14 @@ const setMessage = () => {
     from: faker.internet.email(),
     subject: faker.lorem.words(),
     body: faker.lorem.paragraphs(2),
-    received: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: Date.now() }), // текущий временной метке в секундах
+    received: faker.date.between({
+      from: "2020-01-01T00:00:00.000Z",
+      to: Date.now(),
+    }),
   };
-  if (messages.length > 1000) {
-    messages = [];
-  }
+
   messages.push(newMessage);
-  // console.log("Новое сообщение установлено:", newMessage);
+  console.log("Новое сообщение установлено:", newMessage);
 };
 
 app.get("/messages/unread", (req, res) => {
@@ -31,9 +34,23 @@ app.get("/messages/unread", (req, res) => {
   });
 });
 
-setInterval(() => {
-  setMessage();
-}, 10000);
+app.post("/messages/start", (req, res) => {
+  clearInterval(intervalId);
+  clearInterval(timeoutId);
+  intervalId = setInterval(() => {
+    setMessage();
+  }, 5000);
+  console.log("server start");
+
+  timeoutId = setTimeout(() => {
+    clearInterval(intervalId);
+    console.log("server stopped");
+  }, 50000);
+
+  res.json({
+    status: "start",
+  });
+});
 
 // eslint-disable-next-line no-undef
 const port = process.env.PORT || 7071;
