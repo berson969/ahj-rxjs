@@ -1,4 +1,5 @@
-const MESSAGES_BASE_URL = "http://localhost:7071";
+// const MESSAGES_BASE_URL = "http://localhost:7071";
+const MESSAGES_BASE_URL =  "https://ahj-rxjs-server-bcv3ka0b6-berson969s-projects.vercel.app"
 const listGroup = document.querySelector(".list-group");
 
 const getFormattedDate = (received) => {
