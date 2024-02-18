@@ -52,6 +52,4 @@ app.post("/messages/start", (req, res) => {
   });
 });
 
-// eslint-disable-next-line no-undef
-const port = process.env.PORT || 7071;
-app.listen(port, () => console.log(`The server is running on port ${port}.`));
+app.listen( () => console.log(`The server is running`));
