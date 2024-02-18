@@ -35,12 +35,6 @@ self.addEventListener("fetch", (event) => {
         method: "POST",
       })
     );
-  } else if (url.pathname === "/messages/stop") {
-    event.respondWith(
-      fetch(url, {
-        method: "POST",
-      })
-    );
   } else {
     event.respondWith(handleFetchRequest(event.request));
   }
